@@ -1,4 +1,12 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../ct-shared-styles/ct-application-theme.html">
 
 <!--
 `ct-list-invitations`
@@ -9,26 +17,167 @@ Element to display a list of invitations received by a user on the Centular plat
 
 <dom-module id="ct-list-invitations">
   <template>
-    <style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style is="custom-style">
       :host {
+
         display: block;
+
+        --paper-input-container:  {
+          border-top:1px solid #ccc;
+          border-left:1px solid #ccc;
+          border-right:1px solid #ccc;
+          border-bottom: none;
+          padding: 0;
+          /*  margin-bottom: 24px; */
+        };
+
+        /*padding to move from border */
+
+
+        --paper-input-container-label: {
+          margin-left: 10px;
+        };
+        --paper-input-container-label-floating: {
+          margin-left: 10px;
+        };
+
+
+        --paper-input-error: {
+          left: auto !important;
+          right: 20px !important;
+          font-style: italic;
+        };
+
+        /*--paper-icon-button-ink-color: var(--breadcrumb-icon-color-ripple);*/
       }
+
+      .main-section {
+        margin-top:20px;
+      }
+
+
+      iron-icon.user-online{
+        --iron-icon-fill-color:{#4d96bb;};
+
+      }
+      /*local dropdown menu */
+      paper-menu {
+        width: 400px;
+      }
+      paper-dropdown-menu.custom-dropdown {
+        width: 100%;
+        --paper-input-container: {
+          border-top:1px solid #ccc;
+          border-left:1px solid #ccc;
+          border-right:1px solid #ccc;
+          border-bottom: none;
+          padding: 0;
+          margin-bottom: 8px;
+        };
+        --paper-input-container-input: {
+          padding-left: 10px;
+        };
+      }
+
     </style>
-    <h2>Hello [[prop1]]!</h2>
+
+    <div class="main-section">
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered table-hover table-middle">
+                <thead>
+                <th>Application</th>
+                <th>Invited By</th>
+                <th>Groups</th>
+                <th>Actions</th>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Test App</td>
+                  <td>John Doe</td>
+                  <td>Support Agent, Support Manager</td>
+                  <td class="text-center">
+                    <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
+                    <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
+                  </td>
+                </tr>
+
+                <template is="dom-repeat" items="{{invitationList}}">
+                  <tr>
+                    <td>[[item.appName]]</td>
+                    <td>[[item.invitedBy]]</td>
+                    <td>[[item.group]]</td>
+                    <td class="text-center">
+                      <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
+                      <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
+                    </td>
+                  </tr>
+                </template>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <paper-dialog
+            id="declineModal"
+            modal
+            on-iron-overlay-opened="_patchOverlay">
+      <h2>Decline Invitation</h2>
+      <p>Are you sure you want to decline this invitation?</p>
+      <div class="buttons">
+        <paper-button class="btn btn-link" dialog-dismiss>Cancel</paper-button>
+        <paper-button class="btn btn-primary" on-tap="_declineInvitation" autofocus raised>Yes, I want to decline</paper-button>
+      </div>
+    </paper-dialog>
+
   </template>
 
   <script>
-    Polymer({
+      Polymer({
 
-      is: 'ct-list-invitations',
+          is: 'ct-list-invitations',
 
-      properties: {
-        prop1: {
-          type: String,
-          value: 'ct-list-invitations',
-        },
-      },
+          properties: {
+              invitationList: Array,
+          },
 
-    });
+          _viewSingleStaff : function(e) {
+
+              if(e.model && e.model.item.id){
+                  this.fire('viewStaff', id);
+              } else {
+                  console.log('error');
+                  this.fire('toast', {message: 'Cannot display staff member', type: 'danger'});
+              }
+
+          },
+
+          _declineInvitation : function(e){
+              this.fire('declineInvite', e.details.id);
+          },
+
+          _acceptInvitation : function(e){
+              this.fire('acceptInvite', e.details.id);
+          },
+
+          _openDeclineModal : function(){
+              this.$.declineModal.open();
+          },
+
+          _patchOverlay: function (e) {
+              if (e.target.withBackdrop) {
+                  e.target.parentNode.insertBefore(e.target.backdropElement, e.target);
+              }
+          },
+
+      });
   </script>
 </dom-module>
