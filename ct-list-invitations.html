@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`ct-list-invitations`
+Element to display a list of invitations received by a user on the Centular platform
+
+@demo demo/index.html
+-->
+
+<dom-module id="ct-list-invitations">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'ct-list-invitations',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'ct-list-invitations',
+        },
+      },
+
+    });
+  </script>
+</dom-module>
