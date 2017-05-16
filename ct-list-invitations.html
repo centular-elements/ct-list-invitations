@@ -96,21 +96,12 @@ Element to display a list of invitations received by a user on the Centular plat
                 <th>Actions</th>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>Test App</td>
-                  <td>John Doe</td>
-                  <td>Support Agent, Support Manager</td>
-                  <td class="text-center">
-                    <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
-                    <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
-                  </td>
-                </tr>
 
                 <template is="dom-repeat" items="{{invitationList}}">
                   <tr>
                     <td>[[item.appName]]</td>
-                    <td>[[item.invitedBy]]</td>
-                    <td>[[item.group]]</td>
+                    <td><span>[[item.invitedBy.firstName]]</span> <span>[[item.invitedBy.lastName]]</span></td>
+                    <td>[[item.groupName]]</td>
                     <td class="text-center">
                       <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
                       <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
@@ -147,6 +138,7 @@ Element to display a list of invitations received by a user on the Centular plat
 
           properties: {
               invitationList: Array,
+              tempDeclineId: String
           },
 
           _viewSingleStaff : function(e) {
@@ -161,14 +153,15 @@ Element to display a list of invitations received by a user on the Centular plat
           },
 
           _declineInvitation : function(e){
-              this.fire('declineInvite', e.details.id);
+              this.fire('declineInvite', this.tempDeclineId);
           },
 
           _acceptInvitation : function(e){
-              this.fire('acceptInvite', e.details.id);
+              this.fire('acceptInvite', e.model.item.id);
           },
 
-          _openDeclineModal : function(){
+          _openDeclineModal : function(e){
+              this.tempDeclineId = e.model.item.id;
               this.$.declineModal.open();
           },
 
