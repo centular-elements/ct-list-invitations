@@ -105,11 +105,11 @@ Element to display a list of invitations received by a user on the Centular plat
                                 </th>
                                 <th>Groups</th>
                                 <th>Date Sent</th>
-                                <th hidden$="[[!_inviteType]]">Actions</th>
+                                <th hidden$="[[_inviteType]]">Actions</th>
                                 </thead>
                                 <tbody>
 
-                                <template is="dom-repeat" items="{{_computeInviteListType(_inviteType)}}">
+                                <template is="dom-repeat" items="{{_computeInviteListType(_inviteType, sentInvitationList, receivedInvitationList)}}">
                                     <tr>
                                         <td>[[item.appName]]</td>
                                         <td>
