@@ -17,210 +17,204 @@ Element to display a list of invitations received by a user on the Centular plat
 -->
 
 <dom-module id="ct-list-invitations">
-  <template>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <style is="custom-style">
-      :host {
+    <template>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <style is="custom-style">
+            :host {
 
-        display: block;
+                display: block;
 
-        --paper-input-container:  {
-          border-top:1px solid #ccc;
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
-          border-bottom: none;
-          padding: 0;
-          /*  margin-bottom: 24px; */
-        };
+                --paper-input-container:  {
+                    border-top:1px solid #ccc;
+                    border-left:1px solid #ccc;
+                    border-right:1px solid #ccc;
+                    border-bottom: none;
+                    padding: 0;
+                    /*  margin-bottom: 24px; */
+                };
 
-        /*padding to move from border */
-
-
-        --paper-input-container-label: {
-          margin-left: 10px;
-        };
-        --paper-input-container-label-floating: {
-          margin-left: 10px;
-        };
+                /*padding to move from border */
 
 
-        --paper-input-error: {
-          left: auto !important;
-          right: 20px !important;
-          font-style: italic;
-        };
-
-        /*--paper-icon-button-ink-color: var(--breadcrumb-icon-color-ripple);*/
-      }
-
-      .main-section {
-        margin-top:20px;
-      }
+                --paper-input-container-label: {
+                    margin-left: 10px;
+                };
+                --paper-input-container-label-floating: {
+                    margin-left: 10px;
+                };
 
 
-      iron-icon.user-online{
-        --iron-icon-fill-color:{#4d96bb;};
+                --paper-input-error: {
+                    left: auto !important;
+                    right: 20px !important;
+                    font-style: italic;
+                };
 
-      }
-      /*local dropdown menu */
-      paper-menu {
-        width: 400px;
-      }
-      paper-dropdown-menu.custom-dropdown {
-        width: 100%;
-        --paper-input-container: {
-          border-top:1px solid #ccc;
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
-          border-bottom: none;
-          padding: 0;
-          margin-bottom: 8px;
-        };
-        --paper-input-container-input: {
-          padding-left: 10px;
-        };
-      }
-      paper-material {
-        background: #fff;
-        margin-bottom: 15px;
-        padding: 10px;
-      }
+                /*--paper-icon-button-ink-color: var(--breadcrumb-icon-color-ripple);*/
+            }
 
-    </style>
+            .main-section {
+                margin-top:20px;
+            }
 
-    <paper-material>
 
-      <div class="container-fluid">
+            iron-icon.user-online{
+                --iron-icon-fill-color:{#4d96bb;};
 
-        <div class="row">
-          <div class="col-xs-12">
-            <label for="">Toggle sent/received invitations</label>
-            <paper-toggle-button checked="{{_inviteType}}"><span>[[_computeInvitationTypeText(_inviteType)]]</span> Invitations</paper-toggle-button>
-          </div>
-        </div>
+            }
+            /*local dropdown menu */
+            paper-menu {
+                width: 400px;
+            }
+            paper-dropdown-menu.custom-dropdown {
+                width: 100%;
+                --paper-input-container: {
+                    border-top:1px solid #ccc;
+                    border-left:1px solid #ccc;
+                    border-right:1px solid #ccc;
+                    border-bottom: none;
+                    padding: 0;
+                    margin-bottom: 8px;
+                };
+                --paper-input-container-input: {
+                    padding-left: 10px;
+                };
+            }
 
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered table-hover table-middle">
-                <thead>
-                <th>Application</th>
-                <th>
-                  <span hidden$="[[_inviteType]]">Invited By</span>
-                  <span hidden$="[[!_inviteType]]">Sent To</span>
-                </th>
-                <th>Groups</th>
-                <th>Date Sent</th>
-                <th hidden$="[[!_inviteType]]">Actions</th>
-                </thead>
-                <tbody>
+        </style>
 
-                <template is="dom-repeat" items="{{_computeInviteListType(_inviteType)}}">
-                  <tr>
-                    <td>[[item.appName]]</td>
-                    <td>
-                      <div hidden$="[[_inviteType]]">
-                        <span>[[item.invitedBy.firstName]]</span>
-                        <span>[[item.invitedBy.lastName]]</span>
-                      </div>
+        <div class="main-section">
+            <div class="container-fluid">
 
-                      <div hidden$="[[!_inviteType]]">
-                        <span>[[item.firstName]]</span>
-                        <span>[[item.lastName]]</span>
-                      </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label for="">Display Invitations Type</label>
+                        <paper-toggle-button checked="{{_inviteType}}"><span>[[_computeInvitationTypeText(_inviteType)]]</span> Invitations</paper-toggle-button>
+                    </div>
+                </div>
 
-                    </td>
-                    <td>[[item.groupName]]</td>
-                    <td>[[item.created]]</td>
-                    <td class="text-center" hidden$="[[!_inviteType]]">
-                      <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
-                      <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
-                    </td>
-                    <!--todo: implement revoke/resend when endpoint supports it-->
-                    <!--<td class="text-center" hidden$="[[_inviteType]]">-->
-                    <!--<paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Revoke</paper-button>-->
-                    <!--<paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Resend</paper-button>-->
-                    <!--</td>-->
-                  </tr>
-                </template>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover table-middle">
+                                <thead>
+                                <th>Application</th>
+                                <th>
+                                    <span hidden$="[[_inviteType]]">Invited By</span>
+                                    <span hidden$="[[!_inviteType]]">Sent To</span>
+                                </th>
+                                <th>Groups</th>
+                                <th>Date Sent</th>
+                                <th hidden$="[[!_inviteType]]">Actions</th>
+                                </thead>
+                                <tbody>
 
-                </tbody>
-              </table>
+                                <template is="dom-repeat" items="{{_computeInviteListType(_inviteType)}}">
+                                    <tr>
+                                        <td>[[item.appName]]</td>
+                                        <td>
+                                            <div hidden$="[[_inviteType]]">
+                                                <span>[[item.invitedBy.firstName]]</span>
+                                                <span>[[item.invitedBy.lastName]]</span>
+                                            </div>
+
+                                            <div hidden$="[[!_inviteType]]">
+                                                <span>[[item.firstName]]</span>
+                                                <span>[[item.lastName]]</span>
+                                            </div>
+
+                                        </td>
+                                        <td>[[item.groupName]]</td>
+                                        <td>[[item.created]]</td>
+                                        <td class="text-center" hidden$="[[_inviteType]]">
+                                            <paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Decline</paper-button>
+                                            <paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Accept</paper-button>
+                                        </td>
+                                        <!--todo: implement revoke/resend when endpoint supports it-->
+                                        <!--<td class="text-center" hidden$="[[!_inviteType]]">-->
+                                        <!--<paper-button class="table-button btn-default btn-sm" on-tap="_openDeclineModal" raised>Revoke</paper-button>-->
+                                        <!--<paper-button class="table-button btn-primary btn-sm" on-tap="_acceptInvitation" raised>Resend</paper-button>-->
+                                        <!--</td>-->
+                                    </tr>
+                                </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </paper-material>
 
-    <paper-dialog
-            id="declineModal"
-            modal
-            on-iron-overlay-opened="_patchOverlay">
-      <h2>Decline Invitation</h2>
-      <p>Are you sure you want to decline this invitation?</p>
-      <div class="buttons">
-        <paper-button class="btn btn-link" dialog-dismiss>Cancel</paper-button>
-        <paper-button class="btn btn-primary" on-tap="_declineInvitation" autofocus raised>Yes, I want to decline</paper-button>
-      </div>
-    </paper-dialog>
+        <paper-dialog
+                id="declineModal"
+                modal
+                on-iron-overlay-opened="_patchOverlay">
+            <h2>Decline Invitation</h2>
+            <p>Are you sure you want to decline this invitation?</p>
+            <div class="buttons">
+                <paper-button class="btn btn-link" dialog-dismiss>Cancel</paper-button>
+                <paper-button class="btn btn-primary" on-tap="_declineInvitation" autofocus raised>Yes, I want to decline</paper-button>
+            </div>
+        </paper-dialog>
 
-  </template>
+    </template>
 
-  <script>
-      Polymer({
+    <script>
+        Polymer({
 
-          is: 'ct-list-invitations',
+            is: 'ct-list-invitations',
 
-          properties: {
-              sentInvitationList: Array,
-              receivedInvitationList: Array,
-              tempDeclineId: String,
-              _inviteType: {
-                  type: Boolean,
-                  value: true
-              },
+            properties: {
+                sentInvitationList: Array,
+                receivedInvitationList: Array,
+                tempDeclineId: String,
+                _inviteType: {
+                    type: Boolean,
+                    value: true
+                },
 
-              _inviteTypeText: String
-          },
+                _inviteTypeText: String
+            },
 
-          _viewSingleStaff : function(e) {
+            _viewSingleStaff : function(e) {
 
-              if(e.model && e.model.item.id){
-                  this.fire('viewStaff', id);
-              } else {
-                  console.log('error');
-                  this.fire('toast', {message: 'Cannot display staff member', type: 'danger'});
-              }
+                if(e.model && e.model.item.id){
+                    this.fire('viewStaff', id);
+                } else {
+                    console.log('error');
+                    this.fire('toast', {message: 'Cannot display staff member', type: 'danger'});
+                }
 
-          },
+            },
 
-          _computeInviteListType : function(type){
-              return (type) ? this.sentInvitationList : this.receivedInvitationList ;
-          },
+            _computeInviteListType : function(type){
+                return (type) ? this.sentInvitationList : this.receivedInvitationList ;
+            },
 
-          _computeInvitationTypeText : function(type){
-              return (type) ? "Sent" : 'Received' ;
-          },
+            _computeInvitationTypeText : function(type){
+                return (type) ? "Sent" : 'Received' ;
+            },
 
-          _declineInvitation : function(e){
-              this.fire('declineInvite', this.tempDeclineId);
-          },
+            _declineInvitation : function(e){
+                this.fire('declineInvite', this.tempDeclineId);
+            },
 
-          _acceptInvitation : function(e){
-              this.fire('acceptInvite', e.model.item.id);
-          },
+            _acceptInvitation : function(e){
+                this.fire('acceptInvite', e.model.item.id);
+            },
 
-          _openDeclineModal : function(e){
-              this.tempDeclineId = e.model.item.id;
-              this.$.declineModal.open();
-          },
+            _openDeclineModal : function(e){
+                this.tempDeclineId = e.model.item.id;
+                this.$.declineModal.open();
+            },
 
-          _patchOverlay: function (e) {
-              if (e.target.withBackdrop) {
-                  e.target.parentNode.insertBefore(e.target.backdropElement, e.target);
-              }
-          },
+            _patchOverlay: function (e) {
+                if (e.target.withBackdrop) {
+                    e.target.parentNode.insertBefore(e.target.backdropElement, e.target);
+                }
+            },
 
-      });
-  </script>
+        });
+    </script>
 </dom-module>
