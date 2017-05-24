@@ -53,42 +53,24 @@ Element to display a list of invitations received by a user on the Centular plat
                 /*--paper-icon-button-ink-color: var(--breadcrumb-icon-color-ripple);*/
             }
 
-            .main-section {
-                margin-top:20px;
-            }
-
-
-            iron-icon.user-online{
-                --iron-icon-fill-color:{#4d96bb;};
-
-            }
             /*local dropdown menu */
             paper-menu {
                 width: 400px;
             }
-            paper-dropdown-menu.custom-dropdown {
-                width: 100%;
-                --paper-input-container: {
-                    border-top:1px solid #ccc;
-                    border-left:1px solid #ccc;
-                    border-right:1px solid #ccc;
-                    border-bottom: none;
-                    padding: 0;
-                    margin-bottom: 8px;
-                };
-                --paper-input-container-input: {
-                    padding-left: 10px;
-                };
-            }
+
+            paper-material {
+            background: #fff;
+            margin-bottom: 15px;
+            padding: 10px;
+          }
 
         </style>
 
-        <div class="main-section">
+        <paper-material>
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-xs-12">
-                        <label for="">Display Invitations Type</label>
+                        <label for="">Toggle sent/received invitations</label>
                         <paper-toggle-button checked="{{_inviteType}}"><span>[[_computeInvitationTypeText(_inviteType)]]</span> Invitations</paper-toggle-button>
                     </div>
                 </div>
@@ -144,7 +126,7 @@ Element to display a list of invitations received by a user on the Centular plat
                     </div>
                 </div>
             </div>
-        </div>
+        </paper-material>
 
         <paper-dialog
                 id="declineModal"
