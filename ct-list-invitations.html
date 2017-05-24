@@ -80,15 +80,21 @@ Element to display a list of invitations received by a user on the Centular plat
           padding-left: 10px;
         };
       }
+      paper-material {
+        background: #fff;
+        margin-bottom: 15px;
+        padding: 10px;
+      }
 
     </style>
 
-    <div class="main-section">
+    <paper-material>
+
       <div class="container-fluid">
 
         <div class="row">
           <div class="col-xs-12">
-            <label for="">Display Invitations Type</label>
+            <label for="">Toggle sent/received invitations</label>
             <paper-toggle-button checked="{{_inviteType}}"><span>[[_computeInvitationTypeText(_inviteType)]]</span> Invitations</paper-toggle-button>
           </div>
         </div>
@@ -144,7 +150,7 @@ Element to display a list of invitations received by a user on the Centular plat
           </div>
         </div>
       </div>
-    </div>
+    </paper-material>
 
     <paper-dialog
             id="declineModal"
