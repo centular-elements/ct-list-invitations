@@ -103,6 +103,7 @@ Element to display a list of invitations received by a user on the Centular plat
                                     <span hidden$="[[_inviteType]]">Invited By</span>
                                     <span hidden$="[[!_inviteType]]">Sent To</span>
                                 </th>
+                                <th hidden$="[[!_inviteType]]">Email</th>
                                 <th>Groups</th>
                                 <th>Date Sent</th>
                                 <th hidden$="[[_inviteType]]">Actions</th>
@@ -124,6 +125,7 @@ Element to display a list of invitations received by a user on the Centular plat
                                             </div>
 
                                         </td>
+                                        <td hidden$="[[!_inviteType]]">[[_getSentEmail(item.contacts)]]</td>
                                         <td>[[item.groupName]]</td>
                                         <td>[[item.created]]</td>
                                         <td class="text-center" hidden$="[[_inviteType]]">
@@ -186,6 +188,11 @@ Element to display a list of invitations received by a user on the Centular plat
                     this.fire('toast', {message: 'Cannot display staff member', type: 'danger'});
                 }
 
+            },
+
+            _getSentEmail : function(contacts){
+                var contact = contacts.filter(function(o){ return (o.contactType.toLowerCase() === 'email')})[0];
+                return contact.contact;
             },
 
             _computeInviteListType : function(type){
